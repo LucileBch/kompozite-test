@@ -8,6 +8,7 @@ from typing import Any
 INPUT_PATH = Path(__file__).parent
 OUTPUT_PATH = Path(__file__).parent 
 
+#            MAIN FUNCTION - should call 2 new modules to be shorter (explained further in comments)
 def main(
         input_path:str,
         output_path:Path,
@@ -48,7 +49,7 @@ def main(
     # get nb_chukns in kwargs dict. otherwise return default type
     dtypes = kwargs.get('dtypes', {"ean": str, "id_epd": str})
 
-
+#             SHOULD BE ONE MODULE WITH TWO FUNCTION : one to Read and Transform the file
 # lecture du fichier d'entrée
 # if the filename is given => adding it to the path
     if filename:
@@ -72,6 +73,8 @@ def main(
 # dividing data frame according to number of rows
     dfs = [df[i : i + nb_rows] for i in range(0, total_rows, nb_rows)]
 
+
+#                       SHOULD BE ONE MODULE ==> LOADING CHUNKS IN NEW FILE
 # configuration output
 # if filename is present adding it to output path + chunks, otherwise define it as chunks only
     if filename:
@@ -84,6 +87,7 @@ def main(
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
+
 # for each chunk, load it in file xlsx or csv according to the file extension
     for i, chunk in enumerate(dfs):
         if extension == "xlsx":
@@ -94,6 +98,6 @@ def main(
     # to confirm success
     return True
 
-# script execution
+#                       MAIN SCRIPT EXECUTION (stays in this module main.py)
 if __name__ == "__main__":
     main(INPUT_PATH, OUTPUT_PATH, filename="data.xlsx", nb_rows=100, nb_chunks=2)
